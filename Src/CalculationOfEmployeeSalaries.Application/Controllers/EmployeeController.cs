@@ -8,7 +8,7 @@ using OvetimePolicies;
 namespace CalculationOfEmployeeSalaries.Application.Controllers
 {
     [ApiController]
-    [Route("{datatype}/[controller]")]
+    [Route("[controller]")]
     public class EmployeeController : Controller
     {
         private readonly IEmployeeRepository _repository;
@@ -67,7 +67,7 @@ namespace CalculationOfEmployeeSalaries.Application.Controllers
         }
 
         [HttpGet("Get")]
-        public async Task<IActionResult> Get([FromBody] GetRequestDto request)
+        public async Task<IActionResult> Get([FromQuery] GetRequestDto request)
         {
             var employeeSalary =await  _repository.Get(request.NationalCode, request.Date.ConvertToDateTime());
             var output = Utility.CreateOutputEmployeeDto(employeeSalary);
@@ -75,7 +75,7 @@ namespace CalculationOfEmployeeSalaries.Application.Controllers
         }
 
         [HttpGet("GetRange")]
-        public async Task<IActionResult> GetRange([FromBody] GetRangeRequest request)
+        public async Task<IActionResult> GetRange([FromQuery] GetRangeRequest request)
         {
             var fromDate = new DateTime(request.FromDate.ConvertToDateTime().Year, request.FromDate.ConvertToDateTime().Month, 1);
             var toDate = new DateTime(request.ToDate.ConvertToDateTime().Year, request.ToDate.ConvertToDateTime().Month + 1, 1);

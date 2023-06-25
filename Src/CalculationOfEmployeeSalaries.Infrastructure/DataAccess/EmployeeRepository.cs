@@ -19,7 +19,7 @@ namespace CalculationOfEmployeeSalaries.Infrastructure.DataAccess
             _connection = connection;
         }
 
-        public Task<Employee?>  TryGetByNationalCode(string nationalcode)
+        public Task<Employee?> TryGetByNationalCode(string nationalcode)
         {
             return _context.Employees.Include(s => s.EmployeeSalaries).SingleOrDefaultAsync(c => c.NationalCode == nationalcode);
         }
@@ -45,10 +45,10 @@ namespace CalculationOfEmployeeSalaries.Infrastructure.DataAccess
                          employee.EmployeeSalaries.Add(salary); return employee;
                      }, parameters, splitOn: "EmployeeId");
 
-            if (result is null)
+            if (result is null || result.Count() == 0)
                 throw new Exception("Not found.");
 
-            return result.SingleOrDefault();
+            return result.Single();
         }
 
         public async Task<Employee> GetRange(string nationalCode, DateTime fromDate, DateTime toDate)
@@ -58,7 +58,7 @@ namespace CalculationOfEmployeeSalaries.Infrastructure.DataAccess
                     "SELECT * FROM Employees e WHERE e.NationalCode = @NationalCode;" +
                     "SELECT * FROM Salaries s WHERE s.EmployeeId = (SELECT Id FROM Employees WHERE NationalCode = @NationalCode) and s.Date BETWEEN  @FromDate AND @ToDate AND s.IsDeleted = 0";
 
-            using var results =await  _connection.QueryMultipleAsync(sql, parameters);
+            using var results = await _connection.QueryMultipleAsync(sql, parameters);
 
             var employee = results.Read<Employee>().SingleOrDefault();
             if (employee == null)
