@@ -7,4 +7,14 @@
 docker build -f "Src\CalculationOfEmployeeSalaries.Application\Dockerfile" --force-rm -t calculationofemployeesalariesapplication "Src"
 
 
+نمونه ورودی برای فرمت custom:
+{ 
+  "Data":
+  "Line1:FirstName/LastName/NationalCode/BasicSalary/Allowance/Transportation/Date
+  Line2: mehdi/Ahmadi/1223569875/1000000/300000/300000/14010801",
+
+  "OverTimeCalculator": "CalculatorB"
+}
+
+
 در اینده قصد دارم پروژه را ارتقا داده و برای دیتابیس read از nosql استفاده کنم و cqrs و همچنین متدهای تست را کاملتر کنم 
